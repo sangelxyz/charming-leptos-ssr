@@ -1,10 +1,34 @@
 use crate::app::EchartsRead;
 use leptos::*;
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde::Serialize;
 use serde_wasm_bindgen::to_value;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Debug)]
+#[serde(untagged)]
+enum Value {
+    String(String),
+    Number(i32),
+}
+
+impl From<&str> for Value {
+    fn from(s: &str) -> Self {
+        Value::String(s.to_string())
+    }
+}
+
+impl From<String> for Value {
+    fn from(s: String) -> Self {
+        Value::String(s)
+    }
+}
+
+impl From<i32> for Value {
+    fn from(i: i32) -> Self {
+        Value::Number(i)
+    }
+}
+
+#[derive(Serialize)]
 struct ResizeOpts {
     #[serde(skip_serializing_if = "Option::is_none")]
     width: Option<Value>,
@@ -57,7 +81,7 @@ impl ResizeOpts {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 struct AnimationOption {
     duration: Option<i32>,
     easing: Option<AnimationEasing>,
@@ -94,7 +118,7 @@ pub fn auto_chart_resize(view_update: EchartsRead) {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 pub enum AnimationEasing {
     Linear,
     QuadraticIn,

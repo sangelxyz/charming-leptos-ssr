@@ -1,8 +1,14 @@
+html,
 body {
+    height: 100%;
     font-family: sans-serif;
     text-align: center;
 }
 
 .clk-obj:hover {
     cursor: pointer;
+}
+
+.chart {
+    height: 100%;
 }

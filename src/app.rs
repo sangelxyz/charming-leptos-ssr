@@ -17,8 +17,6 @@ use charming::{
     Chart,
 };
 
-// Browser
-
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
@@ -56,7 +54,6 @@ pub fn App() -> impl IntoView {
 pub type EchartsWrite = WriteSignal<Option<Rc<Echarts>>>;
 pub type EchartsRead = ReadSignal<Option<Rc<Echarts>>>;
 
-// Runs on client only.
 fn update_title(view_update: EchartsRead) {
     #[cfg(feature = "hydrate")]
     WasmRenderer::update(
@@ -73,7 +70,7 @@ fn HomePage() -> impl IntoView {
 
     // AutoSize Chart onMount.
     create_effect(move |_| {
-        if let Some(_) = view_update.get() {
+        if view_update.get().is_some() {
             auto_chart_resize(view_update);
         }
     });
@@ -90,6 +87,7 @@ fn HomePage() -> impl IntoView {
 
 #[component]
 fn Chart(id: i32, set_option: EchartsWrite) -> impl IntoView {
+    // Render on client Only, Feature flag is needed becouse our dependencies are also gated.
     #[cfg(feature = "hydrate")]
     spawn_local(async move {
         let chart = Chart::new()
@@ -101,15 +99,16 @@ fn Chart(id: i32, set_option: EchartsWrite) -> impl IntoView {
             .y_axis(Axis::new().type_(AxisType::Value))
             .series(Line::new().data(vec![150, 230, 224, 218, 135, 147, 260]));
 
+        // Charming, Requires we set a width & Height
         let renderer = WasmRenderer::new(600, 600);
         let result = renderer.render(&id.to_string(), &chart);
 
-        // Store for reactive updates.
+        // Store echarts instance for updates.
         if let Ok(echarts) = result {
-            // wasm_bindgen::from(&echarts) can be used to get JsValue
             set_option.update(move |v| *v = Some(Rc::new(echarts)));
         }
     });
 
+    // Chart Container, it's rendered on both server and client.
     view! {<div id={id}></div>}
 }
