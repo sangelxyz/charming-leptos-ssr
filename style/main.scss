@@ -1,14 +1,26 @@
-html,
-body {
-    height: 100%;
-    font-family: sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+.container {
+    min-height: 100%; /* Make body and container take the full viewport height */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
 }
 
 .clk-obj:hover {
+    text-decoration: underline;
     cursor: pointer;
 }
 
 .chart {
-    height: 100%;
+    flex: 1;
+    height: 100%; /* Fill available space within the container */
+    width: 100%; /* Optional: makes it full width of the container */
 }

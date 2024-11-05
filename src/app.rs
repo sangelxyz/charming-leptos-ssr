@@ -79,9 +79,14 @@ fn HomePage() -> impl IntoView {
     window_event_listener(ev::resize, move |_| auto_chart_resize(view_update));
 
     view! {
-        <h1>"Welcome to Leptos!"</h1>
-        <div class="clk-obj" on:click=move|_| update_title(view_update)>Click Me</div>
-        <Chart set_option=set_option id=1/>
+        <div class="container">
+            <h1>"Welcome to Leptos!"</h1>
+            <div class="clk-obj" on:click=move|_| update_title(view_update)>Click Me</div>
+            <div class="chart">
+                <Chart set_option=set_option id=1/>
+            </div>
+        </div>
+        // <Chart set_option=set_option id=1/>
     }
 }
 
@@ -110,5 +115,5 @@ fn Chart(id: i32, set_option: EchartsWrite) -> impl IntoView {
     });
 
     // Chart Container, it's rendered on both server and client.
-    view! {<div id={id}></div>}
+    view! {<div id={id} class="chart"></div>}
 }

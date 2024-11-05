@@ -92,11 +92,16 @@ struct AnimationOption {
 
 pub fn auto_chart_resize(view_update: EchartsRead) {
     if let Some(echart) = view_update.get_untracked() {
-        if let Some(_client_body) = document().body() {
+        if let Some(client_body) = document().body() {
             // Client Height & Width by Leptos
             //let width = client_body.client_width();
             //let height = client_body.client_height();
 
+            // let height = client_body
+            //     .get_elements_by_class_name("chart")
+            //     .item(0)
+            //     .unwrap()
+            //     .bou;
             // Resize Chart
             // Echarts resize method takes the following options
             //  width: number | 'auto',
@@ -106,11 +111,9 @@ pub fn auto_chart_resize(view_update: EchartsRead) {
 
             let _ = echart.resize(
                 to_value(&ResizeOpts::new(
-                    // ECharts defaults to 100% width and auto height for elements. If the height is not set,
-                    // the chart may not render correctly because a div with 100% width and 0 height will cause it to disappear.
-                    // Make sure to specify a height for your chart element or set it in ECharts configuration.
+                    // ECharts defaults to 100% width and auto height for elements. If the height is not set
                     Some("auto".into()),
-                    Some(300.into()),
+                    Some(600.into()),
                 ))
                 .unwrap(),
             );
